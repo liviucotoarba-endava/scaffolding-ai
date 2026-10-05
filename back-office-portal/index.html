@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Back Office Portal</title>
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <img src="assets/logo.svg" width="32" height="32" alt="">
+      <strong>Back Office Portal</strong>
+      <span>Demo workspace</span>
+    </header>
+    <main>
+      <h1>Users</h1>
+      <p>Manage the people in your workspace.</p>
+      <section aria-label="User directory">
+        <label for="search">Search users</label>
+        <input id="search" type="search" placeholder="Search by name or email">
+        <p id="result-count" role="status">3 users</p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Role</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Ada Lovelace</td><td>ada@example.com</td><td>Admin</td></tr>
+              <tr><td>Grace Hopper</td><td>grace@example.com</td><td>Editor</td></tr>
+              <tr><td>Alan Turing</td><td>alan@example.com</td><td>Viewer</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="empty-state" hidden>No users match your search.</p>
+      </section>
+    </main>
+  </body>
+</html>

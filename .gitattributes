@@ -1,0 +1,4 @@
+# Normalize text in Git while preserving platform-specific wrapper line endings.
+* text=auto
+mvnw text eol=lf
+*.cmd text eol=crlf
