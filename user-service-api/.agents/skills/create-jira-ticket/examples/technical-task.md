@@ -1,5 +1,5 @@
 # Summary
-Add validation for user request fields
+Add automated coverage for input validation
 
 # Issue Type
 Task
@@ -7,12 +7,12 @@ Task
 # Description
 
 ## Context
-User request fields should be checked before service logic runs.
+Input validation rules need focused automated coverage so invalid requests are rejected consistently.
 
 ## Scope
-Require a non-blank name and a valid email address, with limits matching the entity fields.
+Cover the existing required fields, supported values, and boundary limits using the project's current test conventions.
 
 ## Acceptance Criteria
-- [ ] Invalid requests return `400 Bad Request`.
-- [ ] Valid requests continue through the existing API flow.
-- [ ] Tests cover the validation rules.
+- [ ] Tests cover valid input, missing required fields, unsupported values, and relevant boundaries.
+- [ ] Invalid input is rejected before processing causes side effects.
+- [ ] Tests pass with the project's documented verification command.

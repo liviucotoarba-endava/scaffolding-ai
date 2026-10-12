@@ -1,5 +1,5 @@
 # Summary
-Return a clear error when a requested user does not exist
+Reject invalid input with a clear error
 
 # Issue Type
 Bug
@@ -7,18 +7,20 @@ Bug
 # Description
 
 ## Context
-Requesting a user ID that is not in the database currently returns an unexpected server error.
+Illustrative example; confirm the behavior before filing. A request with a required field missing produces an unexpected error instead of a useful validation message.
 
 ## Steps to Reproduce
-1. Start the API with an empty users table.
-2. Send `GET /api/users/99`.
+1. Prepare an otherwise valid request.
+2. Remove a required field and submit the request.
+3. Inspect the returned error and any resulting side effects.
 
 ## Expected Behavior
-The API returns `404 Not Found` with a useful error detail.
+The request is rejected with a useful validation message and no processing side effects.
 
 ## Actual Behavior
-The API returns `500 Internal Server Error`.
+The request returns an unexpected error without identifying the missing field.
 
 ## Acceptance Criteria
-- [ ] Missing users return `404 Not Found`.
-- [ ] The response includes a clear error detail.
+- [ ] A request missing the required field is rejected with a clear validation message.
+- [ ] The rejected request causes no processing side effects.
+- [ ] A regression test covers the reported input and expected behavior.

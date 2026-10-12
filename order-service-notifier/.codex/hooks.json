@@ -1,0 +1,18 @@
+{
+  "description": "Validate conventional commit messages for Codex-issued Git commands.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/order-service-notifier/.codex/hooks/commit_guard.py\"",
+            "statusMessage": "Checking Git commit and push",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

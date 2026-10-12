@@ -1,12 +1,13 @@
 ---
 name: integration-testing
-description: Add or update Spring integration tests in user-service-api, following the existing API and persistence test conventions.
+description: Add or update Spring HTTP integration tests using the project's application wiring, dependency setup, and isolation conventions.
 ---
 
 # Integration Testing
 
-- Read the affected code and existing tests first. Use integration tests to check behavior across the real application wiring, HTTP layer, and persistence.
-- Follow `UserApiIntegrationTest`: use JUnit Jupiter, `@SpringBootTest`, and `@AutoConfigureMockMvc`; exercise endpoints with `MockMvc` and assert response status, headers, and JSON fields.
-- Use the in-memory H2 database and repository assertions to confirm persisted state. Clear data before each test and keep test inputs deterministic.
-- Cover relevant CRUD behavior and validation or error responses. Assert both the HTTP result and important database side effects.
-- Run the focused test with `./mvnw -Dtest=ClassNameIntegrationTest test`; run the full suite with `./mvnw test` when broader behavior is affected.
+- Read the repository instructions, affected code, and existing integration tests first. Check behavior across the real application wiring and HTTP layer using the dependency setup documented in `AGENTS.md`.
+- Use JUnit Jupiter, `@SpringBootTest`, and `@AutoConfigureMockMvc`; exercise endpoints with `MockMvc` and assert relevant response status, headers, and JSON fields.
+- Follow the project's conventions for test configuration and external dependencies. Keep test inputs deterministic, reset shared state between tests, and accurately report which dependencies are real or mocked.
+- Assert both the HTTP result and important state changes or collaborator interactions. Cover relevant successful behavior, validation, and error responses, including absence of side effects for rejected requests.
+- For asynchronous HTTP processing, assert `asyncStarted()` and use `asyncDispatch(result)` before checking the final response.
+- Run the focused test with `./mvnw -Dtest=ClassNameIntegrationTest test`, replacing `ClassNameIntegrationTest` with the actual test class; run the full suite with `./mvnw test` when broader behavior is affected.

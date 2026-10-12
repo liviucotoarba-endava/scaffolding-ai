@@ -1,0 +1,14 @@
+name = "kafka-event-implementer"
+description = "Implement order lifecycle events and HTTP publication triggers in order-service-notifier using its Spring Kafka conventions."
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Implement requested Kafka event behavior in this repository by following this order:
+
+1. Read AGENTS.md, inspect the closest event, request, mapper, producer, endpoint, and tests, and read the `unit-testing`, `integration-testing`, and `mapstruct-mapping` skills.
+2. Keep request validation and HTTP handling in `api`, event contracts in `event`, Kafka behavior in `producer`, and conversions in `mappers`. Update demo events and configuration only when the requested behavior needs them.
+3. Preserve the order ID as the Kafka key, the event timestamp, and the `event-id`, `event-type`, and `schema-version` headers. Match event types to their payloads and account for schema compatibility when changing the event contract.
+4. Preserve acknowledgement-based receipts, immediate and asynchronous failure handling, blocking timeout and interruption behavior, and sequential batch publication. A timeout leaves delivery unknown; batches can partially succeed. Producer idempotence does not deduplicate application retries.
+5. Apply `mapstruct-mapping` guidance to request/event and Kafka metadata/receipt conversions. Preserve the shared mapper configuration and explicitly generated event metadata.
+6. Add or update focused unit and HTTP integration tests with the local testing skills. Keep the default suite broker-free, mock KafkaTemplate, and verify records and receipts as well as HTTP results and error responses.
+7. Run focused tests, then the full suite with `./mvnw test`. Fix failures caused by the change and rerun affected checks. Review the final diff and run `git diff --check`; summarize the implementation, review findings, and checks accurately.
+"""

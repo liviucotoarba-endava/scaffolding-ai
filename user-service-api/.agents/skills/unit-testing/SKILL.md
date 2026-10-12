@@ -1,12 +1,12 @@
 ---
 name: unit-testing
-description: Add or update unit tests in user-service-api, following the existing Java and Spring test conventions.
+description: Add or update Java unit tests using JUnit Jupiter, AssertJ, and Mockito, following the project's existing test conventions.
 ---
 
 # Unit Testing
 
-- Read the affected code and nearby tests first. Keep each test focused on observable behavior, including relevant boundary and failure cases.
+- Read the repository instructions, affected code, and nearby tests first. Keep each test focused on observable behavior, including relevant boundary and failure cases.
 - Use JUnit Jupiter with AssertJ for assertions, `assertThrows` for exceptions, and Mockito for collaborators. Construct the class under test directly; use `MockitoExtension` when mocks are needed.
-- Test mappers with `Mappers.getMapper` and DTO constraints with Jakarta Validation. For controllers, use standalone `MockMvc`; reserve `@SpringBootTest` and `@AutoConfigureMockMvc` for integration coverage with application wiring and persistence.
+- Test mappers with `Mappers.getMapper` and request constraints with Jakarta Validation. For controllers, use standalone `MockMvc`; reserve `@SpringBootTest` and `@AutoConfigureMockMvc` for integration coverage with application wiring.
 - Keep test data deterministic and verify important interactions or absence of side effects where relevant.
-- Run focused tests with `./mvnw -Dtest=ClassNameTest test`; run the full suite with `./mvnw test` when the change affects broader behavior.
+- Run focused tests with `./mvnw -Dtest=ClassNameTest test`, replacing `ClassNameTest` with the actual test class; run the full suite with `./mvnw test` when the change affects broader behavior.
