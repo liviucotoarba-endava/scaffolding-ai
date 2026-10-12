@@ -8,7 +8,7 @@ The session shows how to configure AI support for existing repositories, prepare
 
 **Demo tool:** Codex, with general principles distinguished from tool-specific configuration so they can be applied to other assistants.
 
-This repository contains the presentation outline, preparation checklist, and three demo sub-applications. The AI scaffolding and shared toolkit described below are planned work.
+This repository contains the presentation outline, preparation checklist, and three demo sub-applications. Each application has its own Codex instructions, skills, review agent, and reusable prompts. The shared toolkit described below is planned work.
 
 ## Repository layout
 
@@ -22,7 +22,22 @@ All sub-applications belong to this single GitHub repository and are versioned t
 
 Run each application's commands from its own folder. The demos currently run independently; the frontend uses mock data and the notifier does not call the user API.
 
-The root `.gitignore` excludes IDE metadata, operating-system files, logs, and local environment overrides throughout the repository. Each application's `.gitignore` excludes its generated output. Source files, tests, application configuration, Maven wrapper scripts and properties, and the frontend package lockfile are kept in version control. AI instructions and shared configuration can be added alongside the applications as the demo progresses.
+The root `.gitignore` excludes IDE metadata, operating-system files, logs, and local environment overrides throughout the repository. Each application's `.gitignore` excludes its generated output. Source files, tests, application configuration, Maven wrapper scripts and properties, and the frontend package lockfile are kept in version control.
+
+## Codex scaffolding
+
+Each application keeps a complete local scaffold:
+
+- `AGENTS.md`: project context, conventions, skill routing, and verification commands.
+- `.agents/skills/<name>/SKILL.md`: focused workflows with local `agents/openai.yaml` metadata and default prompts.
+- `.codex/agents/<name>.toml`: a review agent that does not edit files.
+- `README.md`, under "Codex": launch instructions and reusable task examples.
+
+Open the application folder as the Codex project, or use `codex --cd <folder>` from this root. When working from the root, explicitly read the target application's `AGENTS.md` and relevant skill; supply its agent definition for a requested review.
+
+Similar capabilities intentionally remain copied into every application. Keep their workflow and review instructions aligned; vary the stack, paths, commands, and domain rules where needed. The Java testing skills share the same unit and integration conventions; the portal uses the same workflow with Node tests and browser checks. Keep each scaffold usable without files from a sibling application.
+
+Use the local skill names shown in each application README. Follow the [skills](https://learn.chatgpt.com/docs/build-skills) and [custom agent](https://learn.chatgpt.com/docs/agent-configuration/subagents) formats when extending the scaffold.
 
 ## What the session covers
 
@@ -47,7 +62,7 @@ The harness is the environment around the assistant that guides how it works and
 
 ## Demo progression
 
-The three sub-applications provide a REST API, a Kafka producer, and a frontend. The development tasks and AI scaffolding will be prepared around these demos.
+The three sub-applications provide a REST API, a Kafka producer, and a frontend. Their local AI scaffolds are prepared; baseline comparisons and rehearsed development tasks remain to be recorded.
 
 1. **Establish a baseline.** Run a task in the REST API application before adding scaffolding and save the result for comparison.
 2. **Configure one application.** Add `AGENTS.md` and a relevant skill, then demonstrate implementation and verification. Introduce a review agent and reusable task prompts where they help the workflow.
@@ -78,7 +93,7 @@ Prepare in this order:
 - [ ] Choose the example product and development tasks.
 - [x] Create the REST API, Kafka producer, and frontend sub-applications in this repository.
 - [ ] Establish and record baseline AI behavior before adding scaffolding.
-- [ ] Prepare repository instructions, relevant skills, a review agent, and reusable task prompts.
+- [x] Prepare repository instructions, relevant skills, a review agent, and reusable task prompts.
 - [ ] Create a common AI-tools repository with selectable capabilities.
 - [ ] Prepare one useful MCP integration.
 - [ ] Demonstrate one shared capability update reaching a consuming repository.
