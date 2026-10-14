@@ -1,0 +1,8 @@
+- Review only changed code and minimal necessary context; report high-confidence issues with a concrete impact.
+- Match the Jira requirements and preserve unaffected behavior; flag missing requirements or regressions introduced by the diff.
+- Follow existing packages, naming, and implementation patterns; introduce abstractions only when the change needs them.
+- Keep HTTP handling in controllers, business logic in services, persistence in repositories, and conversion in mappers; preserve layer responsibilities.
+- Use constructor injection for required collaborators; keep dependencies explicit and consistent with existing classes.
+- Keep writes in service-level `@Transactional` methods and reads read-only; preserve atomic updates and rollback behavior.
+- Keep credentials and sensitive data out of source, logs, and error responses; prevent unintended disclosure.
+- Do not repeat CI/compiler checks or raise cosmetic preferences; each comment must identify an actionable defect or rule violation.
