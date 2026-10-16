@@ -7,11 +7,6 @@ The session shows how to configure AI support for existing repositories, prepare
 start, and reuse capabilities across a team. It draws on commercial project experience and connects each configuration
 addition to a coding task and an observable result.
 
-**Duration:** 60 minutes, including questions.
-
-**Demo tool:** Codex, with general principles distinguished from tool-specific configuration so they can be applied to
-other assistants.
-
 This repository contains the presentation outline, preparation checklist, three demo sub-applications, and the shared [
 `ai-tools`](ai-tools/README.md) collection. The collection brings their AI support materials together for presentation
 and selective reuse; the original demo scaffolds remain independent.
@@ -49,7 +44,8 @@ root, explicitly read the target application's `AGENTS.md` and relevant skill; s
 requested implementation task.
 
 Similar capabilities intentionally remain copied into every application. `ai-tools` stores identical tools once and
-uses one shared bug-fixing workflow and separate Java and portal testing skills. Its 12 skills cover all 27 source skills.
+uses one shared bug-fixing workflow and separate Java and portal testing skills. Its 16 skills cover all 27 source
+skills.
 Use its [Codex app / CLI](ai-tools/docs/codex-app-cli.md) and [IntelliJ](ai-tools/docs/intellij.md) guides for selective
 reuse; collection updates do not synchronize into the demos.
 
@@ -79,60 +75,3 @@ The harness is the environment around the assistant that guides how it works and
 | Tools              | Provide the capabilities and integrations needed to complete a task. |
 | Execution controls | Define where the assistant can act and when approval is required.    |
 | Verification       | Use tests, checks, and review to assess the resulting changes.       |
-
-## Demo progression
-
-The three sub-applications provide a REST API, a Kafka producer, and a frontend. Their local AI scaffolds are prepared;
-baseline comparisons and rehearsed development tasks remain to be recorded.
-
-1. **Establish a baseline.** Run a task in the REST API application before adding scaffolding and save the result for
-   comparison.
-2. **Configure one application.** Add `AGENTS.md` and a relevant skill, then demonstrate implementation and
-   verification. Introduce an implementation agent and reusable task prompts where they help the workflow.
-3. **Reuse across applications.** Carry shared guidance into the Kafka producer and frontend, adding capabilities
-   specific to each application. Use this stage to expose duplication and maintenance costs.
-4. **Use the shared toolkit.** Explore `ai-tools` and select capabilities for a scratch project. Demonstrate
-   installation, version tracking, and one shared update reaching a consuming repository; those demonstrations remain to
-   be rehearsed.
-5. **Add an MCP integration.** Use one integration to support a concrete development task.
-6. **Apply the workflow to new projects.** Show how teams can start with the scaffolding prepared and maintain it over
-   time.
-
-Each step should show the task, the configuration change, and the resulting behavior or verification evidence.
-
-## Session agenda
-
-| Time      | Topic                                                                                         |
-|-----------|-----------------------------------------------------------------------------------------------|
-| 0–6 min   | Commercial project story, observed problems, and intended improvements.                       |
-| 6–11 min  | Building blocks and how they form the AI harness.                                             |
-| 11–26 min | REST API: baseline → `AGENTS.md` → skill → implementation → verification.                     |
-| 26–35 min | Kafka producer and frontend: reuse shared guidance and add application-specific capabilities. |
-| 35–45 min | Shared toolkit: capability selection, installation, and updates.                              |
-| 45–50 min | MCP integration supporting a concrete task.                                                   |
-| 50–53 min | Scaffolding new projects and the team workflow.                                               |
-| 53–60 min | Questions and discussion.                                                                     |
-
-## Preparation checklist
-
-Prepare in this order:
-
-- [ ] Choose the example product and development tasks.
-- [x] Create the REST API, Kafka producer, and frontend sub-applications in this repository.
-- [ ] Establish and record baseline AI behavior before adding scaffolding.
-- [x] Prepare repository instructions, relevant skills, implementation agents, and reusable task prompts.
-- [x] Collect shared AI tools with distinct variants and short usage guides in `ai-tools`.
-- [ ] Prepare one useful MCP integration.
-- [ ] Demonstrate one shared capability update reaching a consuming repository.
-- [ ] Rehearse the demo and save checkpoints and example results.
-- [ ] Build the slides around the rehearsed sequence.
-
-## Decisions to explain
-
-- **Local versus shared:** Keep product context and repository-specific guidance local; identify reusable guidance and
-  capabilities for the common toolkit.
-- **Distribution:** Compare copy-paste, selective synchronization, Git submodules, and supported packages or plugins,
-  including their maintenance tradeoffs.
-- **Selection and versions:** Explain how each project chooses capabilities, tracks versions, and adopts updates.
-- **Ownership:** Identify who maintains shared guidance and reviews changes before consumers adopt them.
-- **Verification:** Show the checks and human review developers use before accepting AI output.
