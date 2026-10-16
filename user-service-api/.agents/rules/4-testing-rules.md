@@ -1,0 +1,8 @@
+- Cover changed behavior, relevant boundaries, and failures; assertions must detect regressions rather than mirror implementation details.
+- Use JUnit Jupiter, AssertJ, and Mockito for unit tests; construct services directly with mocked repository and mapper collaborators.
+- Use standalone `MockMvc` for controller unit tests and Jakarta Validation for DTO tests; isolate HTTP behavior and constraint enforcement.
+- Test real generated mappers through `Mappers.getMapper`; verify copied fields, ignored create IDs, and preserved update IDs.
+- Use `@SpringBootTest` and `@AutoConfigureMockMvc` with the real repository and dedicated H2 database for HTTP integration tests; exercise application wiring.
+- Clear repository data before each integration test and keep inputs deterministic; tests must pass independently of order.
+- Assert HTTP status, relevant headers and JSON fields alongside persisted CRUD state; successful responses alone do not prove correct writes.
+- Cover affected validation and not-found paths, including absence of persistence changes; rejected requests must have no write side effects.

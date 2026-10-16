@@ -1,0 +1,6 @@
+- Define entity/DTO conversions in MapStruct interfaces using `MappingConfiguration`; retain shared Spring injection and mapping policy.
+- Map every field required by the DTO contract and ignore fields only intentionally; prevent silent loss or unintended exposure of data.
+- Ignore the database-generated `User.id` when mapping create requests; identity must come from persistence.
+- Update mutable users through `@MappingTarget` and preserve their IDs; change the existing entity without replacing its identity.
+- Keep mappings limited to conversion and outside repository access or business decisions; services own those responsibilities.
+- Map create responses from the saved entity; return the generated ID and actual persisted values.

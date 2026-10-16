@@ -1,0 +1,9 @@
+# Maven build output
+/target/
+/.flattened-pom.xml
+
+# Compiler and coverage output
+/out/
+/coverage/
+/jacoco.exec
+*.class

@@ -1,0 +1,9 @@
+- Preserve `/api/users` routes and existing JSON contracts unless Jira explicitly requires a change; protect API consumers.
+- Accept request DTOs and return response DTOs rather than JPA entities; keep persistence details outside the HTTP contract.
+- Apply `@Valid` to request bodies and Jakarta constraints to DTO fields; reject invalid input before persistence.
+- Keep request limits aligned with persistence constraints; user names allow at most 100 characters and emails 254.
+- Require nonblank names and valid, nonblank emails; invalid user requests must return 400 without changing stored data.
+- Return 201 with the saved response and a `Location` identifying the created user; clients must be able to retrieve that resource.
+- Keep GET and successful PUT responses at 200 and DELETE at 204 with no body; preserve established CRUD semantics.
+- Treat PUT as replacement of editable fields on an existing user and preserve its ID; do not silently create a missing user.
+- Raise `UserNotFoundException` for missing users and handle it centrally as 404 `ProblemDetail`; keep errors consistent across operations.

@@ -1,0 +1,13 @@
+# Maven build output
+/target/
+/.flattened-pom.xml
+
+# Compiler and coverage output
+/out/
+/coverage/
+/jacoco.exec
+*.class
+
+# Local H2 database files (when using a file-backed database)
+*.mv.db
+*.trace.db

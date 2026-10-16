@@ -1,0 +1,14 @@
+name = "rest-api-implementer"
+description = "Implement REST API endpoints in user-service-api using its existing Spring MVC conventions."
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Implement requested REST API behavior in this repository by following this order:
+
+1. Read the repository instructions, inspect the closest endpoint implementation and tests, and read the `unit-testing-java`, `integration-testing-java`, and `mapstruct-mapping` skills.
+2. Implement the endpoint in the existing layers: keep HTTP handling in controllers, business behavior in services, persistence behind repositories, and API shapes in request/response DTOs. Follow `/api/users` conventions for validation, 201 plus Location on create, 204 on delete, and ProblemDetail for not-found errors.
+3. Apply `mapstruct-mapping` guidance to any entity/DTO mappings; preserve the shared mapper configuration and generated-ID behavior.
+4. Add or update focused unit tests using the `unit-testing-java` skill.
+5. Add or update integration tests using the `integration-testing-java` skill. Exercise the HTTP endpoint and verify relevant persisted state and side effects.
+6. Run focused unit and integration tests, then run the full suite with `./mvnw test`. Fix failures caused by the change and rerun the affected checks.
+7. Review the final diff for correctness, API consistency, test coverage, and scope; run `git diff --check`. Summarize the implementation and report the checks and code review results.
+"""
