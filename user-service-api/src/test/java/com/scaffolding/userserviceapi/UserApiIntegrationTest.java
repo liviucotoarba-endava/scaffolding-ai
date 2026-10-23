@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -95,6 +96,33 @@ class UserApiIntegrationTest {
         assertThat(updatedUser.getName()).isEqualTo("Grace Hopper");
         assertThat(updatedUser.getEmail()).isEqualTo("grace@example.com");
         assertThat(userRepository.count()).isEqualTo(1L);
+    }
+
+    @Test
+    void patchUpdatesOnlySuppliedFields() throws Exception {
+        User user = saveUser();
+        mockMvc.perform(patch("/api/users/{id}", user.getId()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Grace Hopper\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Grace Hopper"))
+                .andExpect(jsonPath("$.email").value("ada@example.com"));
+        User updated = userRepository.findById(user.getId()).orElseThrow();
+        assertThat(updated.getName()).isEqualTo("Grace Hopper");
+        assertThat(updated.getEmail()).isEqualTo("ada@example.com");
+    }
+
+    @Test
+    void patchRejectsInvalidValuesAndMissingUsers() throws Exception {
+        User user = saveUser();
+        mockMvc.perform(patch("/api/users/{id}", user.getId()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\" \"}"))
+                .andExpect(status().isBadRequest());
+        mockMvc.perform(patch("/api/users/{id}", user.getId()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"invalid\"}"))
+                .andExpect(status().isBadRequest());
+        mockMvc.perform(patch("/api/users/{id}", 999999).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"New\"}"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
