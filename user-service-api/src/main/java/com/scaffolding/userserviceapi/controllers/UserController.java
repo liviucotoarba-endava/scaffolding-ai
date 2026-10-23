@@ -1,6 +1,7 @@
 package com.scaffolding.userserviceapi.controllers;
 
 import com.scaffolding.userserviceapi.dto.UserRequestDto;
+import com.scaffolding.userserviceapi.dto.UserPatchRequestDto;
 import com.scaffolding.userserviceapi.dto.UserResponseDto;
 import com.scaffolding.userserviceapi.services.UserService;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,6 +51,11 @@ public class UserController {
     @PutMapping("/{id}")
     public UserResponseDto update(@PathVariable Long id, @Valid @RequestBody UserRequestDto request) {
         return userService.update(id, request);
+    }
+
+    @PatchMapping("/{id}")
+    public UserResponseDto patch(@PathVariable Long id, @Valid @RequestBody UserPatchRequestDto request) {
+        return userService.patch(id, request);
     }
 
     @DeleteMapping("/{id}")
