@@ -4,15 +4,21 @@ import com.scaffolding.userserviceapi.entities.User;
 import com.scaffolding.userserviceapi.repos.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -107,6 +113,78 @@ class UserApiIntegrationTest {
 
         assertThat(userRepository.existsById(user.getId())).isFalse();
         assertThat(userRepository.count()).isZero();
+    }
+
+    @ParameterizedTest
+    @MethodSource("validPatches")
+    void patchPersistsSelectedFieldsAndReturnsUpdatedUser(String json, String name, String email) throws Exception {
+        User user = saveUser();
+
+        mockMvc.perform(patch("/api/users/{id}", user.getId()).contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(user.getId().intValue()))
+                .andExpect(jsonPath("$.name").value(name))
+                .andExpect(jsonPath("$.email").value(email));
+
+        User saved = userRepository.findById(user.getId()).orElseThrow();
+        assertThat(saved.getName()).isEqualTo(name);
+        assertThat(saved.getEmail()).isEqualTo(email);
+        assertThat(userRepository.count()).isEqualTo(1);
+        mockMvc.perform(get("/api/users/{id}", user.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(name))
+                .andExpect(jsonPath("$.email").value(email));
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidPatches")
+    void patchRejectsInvalidValuesWithoutChangingPersistedUser(String json) throws Exception {
+        User user = saveUser();
+
+        mockMvc.perform(patch("/api/users/{id}", user.getId()).contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isBadRequest());
+
+        User saved = userRepository.findById(user.getId()).orElseThrow();
+        assertThat(saved.getName()).isEqualTo(user.getName());
+        assertThat(saved.getEmail()).isEqualTo(user.getEmail());
+        assertThat(userRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    void patchMissingUserReturns404WithoutCreatingUser() throws Exception {
+        mockMvc.perform(patch("/api/users/999999").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Grace Hopper\"}"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.detail").value("User with id 999999 was not found"));
+
+        assertThat(userRepository.count()).isZero();
+    }
+
+    private static Stream<Arguments> validPatches() {
+        return Stream.of(
+                Arguments.of("{\"name\":\"Grace Hopper\"}", "Grace Hopper", "ada@example.com"),
+                Arguments.of("{\"email\":\"grace@example.com\"}", "Ada Lovelace", "grace@example.com"),
+                Arguments.of("{\"name\":\"Grace Hopper\",\"email\":\"grace@example.com\"}",
+                        "Grace Hopper", "grace@example.com"),
+                Arguments.of("{}", "Ada Lovelace", "ada@example.com")
+        );
+    }
+
+    private static Stream<String> invalidPatches() {
+        return Stream.of(
+                "{\"name\":null}",
+                "{\"email\":null}",
+                "{\"name\":\" \"}",
+                "{\"email\":\" \"}",
+                "{\"email\":\"invalid-email\"}",
+                "{\"name\":\"" + "a".repeat(101) + "\"}",
+                "{\"email\":\"" + "a".repeat(255) + "\"}",
+                "{\"name\":\"Grace Hopper\",\"email\":null}",
+                "{\"name\":null,\"email\":\"grace@example.com\"}",
+                "{\"name\":\"Grace Hopper\",\"email\":\"invalid-email\"}"
+        );
     }
 
     private User saveUser() {

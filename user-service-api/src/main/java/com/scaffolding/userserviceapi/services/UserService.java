@@ -1,5 +1,6 @@
 package com.scaffolding.userserviceapi.services;
 
+import com.scaffolding.userserviceapi.dto.UserPatchRequestDto;
 import com.scaffolding.userserviceapi.dto.UserRequestDto;
 import com.scaffolding.userserviceapi.dto.UserResponseDto;
 import com.scaffolding.userserviceapi.entities.User;
@@ -40,6 +41,13 @@ public class UserService {
     public UserResponseDto update(Long id, UserRequestDto request) {
         User user = findUser(id);
         userMapper.updateEntity(request, user);
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Transactional
+    public UserResponseDto patch(Long id, UserPatchRequestDto request) {
+        User user = findUser(id);
+        userMapper.patchEntity(request, user);
         return userMapper.toDto(userRepository.save(user));
     }
 

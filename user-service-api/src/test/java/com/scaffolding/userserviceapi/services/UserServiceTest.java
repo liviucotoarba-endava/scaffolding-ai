@@ -1,5 +1,6 @@
 package com.scaffolding.userserviceapi.services;
 
+import com.scaffolding.userserviceapi.dto.UserPatchRequestDto;
 import com.scaffolding.userserviceapi.dto.UserRequestDto;
 import com.scaffolding.userserviceapi.dto.UserResponseDto;
 import com.scaffolding.userserviceapi.entities.User;
@@ -138,6 +139,37 @@ class UserServiceTest {
 
         verify(userRepository).findById(99L);
         verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    void patchMapsSelectedChangesBeforeSavingExistingUser() {
+        User user = user(1L);
+        UserPatchRequestDto request = new UserPatchRequestDto();
+        request.setName("Grace Hopper");
+        UserResponseDto response = new UserResponseDto(1L, "Grace Hopper", "ada@example.com");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        when(userMapper.toDto(user)).thenReturn(response);
+
+        assertThat(userService.patch(1L, request)).isEqualTo(response);
+
+        var order = inOrder(userRepository, userMapper);
+        order.verify(userRepository).findById(1L);
+        order.verify(userMapper).patchEntity(request, user);
+        order.verify(userRepository).save(user);
+        order.verify(userMapper).toDto(user);
+    }
+
+    @Test
+    void patchThrowsWithoutSavingWhenUserDoesNotExist() {
+        when(userRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class,
+                () -> userService.patch(99L, new UserPatchRequestDto()));
+
+        verify(userRepository).findById(99L);
+        verifyNoMoreInteractions(userRepository);
+        verifyNoInteractions(userMapper);
     }
 
     private User user(Long id) {
